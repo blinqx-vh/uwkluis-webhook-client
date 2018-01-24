@@ -1,0 +1,18 @@
+{
+    "name": "ufo/webhook-client",
+    "description": "A client package to connect to a webhook enabled API",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "lcobucci/jwt": "^3.2",
+        "psr/http-message": "^1.0",
+        "fig/http-message-util": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ufo\\WebhookClient\\": "src/"
+        }
+    }
+}
