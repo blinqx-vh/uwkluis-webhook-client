@@ -27,12 +27,14 @@ final class Processor
         string $secret,
         callable $callable = null
     ): ResponseInterface {
-        $digestable = (string) $request->getBody() . $secret;
+        $body = (string) $request->getBody();
+        $digestable = $body . $secret;
         $digest = hash_hmac('sha256', $digestable, $secret);
         if ($request->getHeader('X-Hook-Signature')
-            && $request->getHeader('X-Hook-Signature')[0] === $digest) {
-
-            $callable($this->parseMessage($request->getParsedBody()));
+            && hash_equals($request->getHeader('X-Hook-Signature')[0], $digest)) {
+            if (is_callable($callable)) {
+                $callable($this->parseMessage($request->getParsedBody()));
+            }
 
             return $response
                 ->withHeader('X-Hook-Secret', $secret)
