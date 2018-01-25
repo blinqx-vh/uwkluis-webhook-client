@@ -16,6 +16,7 @@ final class Processor
      * @param ResponseInterface      $response
      * @param string                 $secret
      * @param callable|null          $callable
+     *
      * @throws InvalidSignatureException
      *
      * @return ResponseInterface
