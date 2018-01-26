@@ -33,7 +33,7 @@ final class Processor
         if ($request->getHeader('X-Hook-Signature')
             && hash_equals($request->getHeader('X-Hook-Signature')[0], $digest)) {
             if (is_callable($callable)) {
-                $callable($this->parseMessage($request->getParsedBody()));
+                $callable($this->parseMessage((array) $request->getParsedBody()));
             }
 
             return $response
@@ -55,13 +55,20 @@ final class Processor
      */
     public function parseMessage(array $message): Message
     {
+        /** @var array $metadata */
+        $metadata = $message['metadata'];
+        $dateTime = DateTime::createFromFormat('U', (string) $metadata['timestamp']);
+        if (!$dateTime instanceof DateTime) {
+            throw new \UnexpectedValueException('The timestamp is not parseable to a DateTime object');
+        }
+
         return (new Message())
             ->setData($message['data'])
-            ->setWebhookId($message['metadata']['webhook_id'])
-            ->setIdentifier($message['metadata']['identifier'])
-            ->setTries($message['metadata']['tries'])
-            ->setEvent($message['metadata']['event'])
-            ->setSequence($message['metadata']['sequence'])
-            ->setTimestamp(DateTime::createFromFormat('U', (string) $message['metadata']['timestamp']));
+            ->setWebhookId((int) $metadata['webhook_id'])
+            ->setIdentifier((string) $metadata['identifier'])
+            ->setTries((int) $metadata['tries'])
+            ->setEvent((string) $metadata['event'])
+            ->setSequence((int) $metadata['sequence'])
+            ->setTimestamp($dateTime);
     }
 }

@@ -4,7 +4,7 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Total Downloads][ico-downloads]][link-downloads]
-
+[![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 
 This is a client to easily handle incoming webhooks produced by the ufo/webhooks package.
 
@@ -75,6 +75,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/ufo/webhook-client.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/ufo/webhook-client.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/ufo/webhook-client.svg?style=flat-square
+[ico-sensiolabs]: https://img.shields.io/sensiolabs/i/d7a6387a-192c-4614-9c74-a4889cdfa68d.svg 
 
 [link-packagist]: https://packagist.org/packages/ufo/webhook-client
 [link-scrutinizer]: https://scrutinizer-ci.com/g/ufo/webhook-client/code-structure
@@ -82,3 +83,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-downloads]: https://packagist.org/packages/ufo/webhook-client
 [link-author]: https://bitbucket.org/hypotheekbond/ufo-webhook-client
 [link-contributors]: ../../contributors
+[link-sensiolabs]: https://insight.sensiolabs.com/projects/d7a6387a-192c-4614-9c74-a4889cdfa68d
