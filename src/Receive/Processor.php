@@ -33,7 +33,7 @@ final class Processor
         if ($request->getHeader('X-Hook-Signature')
             && hash_equals($request->getHeader('X-Hook-Signature')[0], $digest)) {
             if (is_callable($callable)) {
-                $callable($this->parseMessage((array) $request->getParsedBody()));
+                $callable($this->parseMessage((array) json_decode($body, true)));
             }
 
             return $response

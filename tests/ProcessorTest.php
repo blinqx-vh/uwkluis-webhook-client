@@ -13,10 +13,10 @@ use Ufo\WebhookClient\Exception\InvalidSignatureException;
 
 class ProcessorTest extends TestCase
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $message;
+    /** @var Message */
+    private $parsedMessage;
 
     protected function setUp()
     {
@@ -75,12 +75,16 @@ class ProcessorTest extends TestCase
             ->withHeader('X-Hook-Signature', $digest)
             ->withBody($bufferStream);
         $testResponse = new Response();
+        $function = function (Message $message) {
+            $this->parsedMessage = $message;
+        };
         try {
-            $response = $processor->process($testRequest, $testResponse, $secret);
+            $response = $processor->process($testRequest, $testResponse, $secret, $function);
         } catch (InvalidSignatureException $e) {
 
         }
         $this->assertTrue(isset($response));
+        $this->assertInstanceOf(Message::class, $this->parsedMessage);
     }
 
     public function testProcessWrongSecret()
@@ -103,6 +107,7 @@ class ProcessorTest extends TestCase
         }
         $this->assertTrue(isset($e));
         $this->assertInstanceOf(InvalidSignatureException::class, $e);
+        $this->assertEquals($testRequest, $e->getRequest());
     }
 
 
