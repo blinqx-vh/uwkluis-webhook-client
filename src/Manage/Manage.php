@@ -14,17 +14,29 @@ final class Manage
     private $baseUri;
     /** @var GuzzleClient */
     private $guzzleClient;
+    /** @var null|string */
+    private $basicAuthUserName;
+    /** @var null|string */
+    private $basicAuthPassword;
 
     /**
      * Manage constructor.
      *
      * @param string       $baseUri
      * @param GuzzleClient $guzzleClient
+     * @param string|null  $basicAuthUserName
+     * @param string|null  $basicAuthPassword
      */
-    public function __construct(string $baseUri, GuzzleClient $guzzleClient)
-    {
+    public function __construct(
+        string $baseUri,
+        GuzzleClient $guzzleClient,
+        string $basicAuthUserName = null,
+        string $basicAuthPassword = null
+    ) {
         $this->baseUri = $baseUri;
         $this->guzzleClient = $guzzleClient;
+        $this->basicAuthUserName = $basicAuthUserName;
+        $this->basicAuthPassword = $basicAuthPassword;
     }
 
     /**
@@ -38,6 +50,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook',
                 [
+                    'auth'    => $this->getBasicAuth(),
                     'headers' => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -63,6 +76,7 @@ final class Manage
         /** @var \GuzzleHttp\Psr7\Response $response */
         $response = $this->guzzleClient->post($this->baseUri . '/webhook',
             [
+                'auth'        => $this->getBasicAuth(),
                 'headers'     => [
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -73,6 +87,7 @@ final class Manage
 
         $decodedResponse = json_decode($httpResponseBody, true);
         $decodedResponse['secret'] = $response->getHeader('X-Hook-Secret')[0];
+
         return $decodedResponse;
     }
 
@@ -88,6 +103,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook/' . $id,
                 [
+                    'auth'    => $this->getBasicAuth(),
                     'headers' => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -115,6 +131,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->put($this->baseUri . '/webhook/' . $id . '?' . $queryString,
                 [
+                    'auth'    => $this->getBasicAuth(),
                     'headers' => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -136,6 +153,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->delete($this->baseUri . '/webhook/' . $id,
                 [
+                    'auth'    => $this->getBasicAuth(),
                     'headers' => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -143,6 +161,7 @@ final class Manage
                 ])->getBody()->getContents();
 
         $result = json_decode($httpResponse, true);
+
         return $result === 'success';
     }
 
@@ -158,6 +177,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook/claim-check',
                 [
+                    'auth'    => $this->getBasicAuth(),
                     'headers' => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
@@ -183,6 +203,21 @@ final class Manage
         $this->baseUri = $baseUri;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function getBasicAuth(): array
+    {
+        if ($this->basicAuthUserName && $this->basicAuthPassword) {
+            return [
+                $this->basicAuthUserName,
+                $this->basicAuthPassword,
+            ];
+        }
+
+        return [];
     }
 
 }
