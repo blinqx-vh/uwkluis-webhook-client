@@ -5,6 +5,7 @@ namespace Ufo\WebhookClient\Manage;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\RequestOptions;
 use Lcobucci\JWT\Token;
 use Ufo\WebhookClient\Receive\Processor;
 
@@ -14,29 +15,19 @@ final class Manage
     private $baseUri;
     /** @var GuzzleClient */
     private $guzzleClient;
-    /** @var null|string */
-    private $basicAuthUserName;
-    /** @var null|string */
-    private $basicAuthPassword;
 
     /**
      * Manage constructor.
      *
      * @param string       $baseUri
      * @param GuzzleClient $guzzleClient
-     * @param string|null  $basicAuthUserName
-     * @param string|null  $basicAuthPassword
      */
     public function __construct(
         string $baseUri,
-        GuzzleClient $guzzleClient,
-        string $basicAuthUserName = null,
-        string $basicAuthPassword = null
+        GuzzleClient $guzzleClient
     ) {
         $this->baseUri = $baseUri;
         $this->guzzleClient = $guzzleClient;
-        $this->basicAuthUserName = $basicAuthUserName;
-        $this->basicAuthPassword = $basicAuthPassword;
     }
 
     /**
@@ -50,8 +41,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook',
                 [
-                    'auth'    => $this->getBasicAuth(),
-                    'headers' => [
+                    RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
@@ -76,12 +66,11 @@ final class Manage
         /** @var \GuzzleHttp\Psr7\Response $response */
         $response = $this->guzzleClient->post($this->baseUri . '/webhook',
             [
-                'auth'        => $this->getBasicAuth(),
-                'headers'     => [
+                RequestOptions::HEADERS     => [
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer ' . (string) $accessToken,
                 ],
-                'form_params' => $data,
+                RequestOptions::FORM_PARAMS => $data,
             ]);
         $httpResponseBody = $response->getBody()->getContents();
 
@@ -103,8 +92,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook/' . $id,
                 [
-                    'auth'    => $this->getBasicAuth(),
-                    'headers' => [
+                    RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
@@ -131,8 +119,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->put($this->baseUri . '/webhook/' . $id . '?' . $queryString,
                 [
-                    'auth'    => $this->getBasicAuth(),
-                    'headers' => [
+                    RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
@@ -153,8 +140,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->delete($this->baseUri . '/webhook/' . $id,
                 [
-                    'auth'    => $this->getBasicAuth(),
-                    'headers' => [
+                    RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
@@ -177,8 +163,7 @@ final class Manage
         $httpResponse =
             $this->guzzleClient->get($this->baseUri . '/webhook/claim-check',
                 [
-                    'auth'    => $this->getBasicAuth(),
-                    'headers' => [
+                    RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
@@ -204,20 +189,4 @@ final class Manage
 
         return $this;
     }
-
-    /**
-     * @return array
-     */
-    private function getBasicAuth(): array
-    {
-        if ($this->basicAuthUserName && $this->basicAuthPassword) {
-            return [
-                $this->basicAuthUserName,
-                $this->basicAuthPassword,
-            ];
-        }
-
-        return [];
-    }
-
 }
