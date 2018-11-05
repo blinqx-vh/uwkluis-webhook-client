@@ -18,7 +18,7 @@ class ManageTest extends TestCase
     {
         $this->assertTrue(
             $this->mockApi(
-                'get',
+                'delete',
                 [new Token(), 1],
                 [],
                 StatusCodeInterface::STATUS_NO_CONTENT
