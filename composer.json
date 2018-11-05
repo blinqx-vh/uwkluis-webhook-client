@@ -1,32 +1,33 @@
 {
-    "name": "ufo/webhook-client",
-    "description": "A client package to connect to a webhook enabled API",
-    "type": "library",
-    "license": "MIT",
-    "require": {
-        "php": ">=7.0.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "lcobucci/jwt": "^3.2",
-        "psr/http-message": "^1.0",
-        "fig/http-message-util": "^1.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit" : ">=5.4.3",
-        "squizlabs/php_codesniffer": "^2.3"
-    },
-    "autoload": {
-        "psr-4": {
-            "Ufo\\WebhookClient\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Ufo\\WebhookClient\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "phpunit",
-        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
-        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+  "name": "ufo/webhook-client",
+  "description": "A client package to connect to a webhook enabled API",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0.0",
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^6.3",
+    "lcobucci/jwt": "^3.2",
+    "psr/http-message": "^1.0",
+    "fig/http-message-util": "^1.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.4, ^6.5",
+    "squizlabs/php_codesniffer": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ufo\\WebhookClient\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ufo\\WebhookClient\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+    "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+  }
 }

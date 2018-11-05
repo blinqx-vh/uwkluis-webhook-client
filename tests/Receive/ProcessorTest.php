@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Ufo\WebhookClient\Receive;
 
-
 use GuzzleHttp\Psr7\BufferStream;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -60,6 +59,10 @@ class ProcessorTest extends TestCase
         $this->assertEquals($parsedMessage->getSequence(), $sequence);
         $this->assertInstanceOf(\DateTime::class, $parsedMessage->getTimestamp());
         $this->assertEquals(new \DateTime('1970-01-01 00:00:01'), $parsedMessage->getTimestamp());
+
+        $this->message['metadata']['timestamp'] = 'a';
+        $this->expectException('UnexpectedValueException');
+        $processor->parseMessage($this->message);
     }
 
     public function testProcessCorrectSecret()
@@ -79,9 +82,10 @@ class ProcessorTest extends TestCase
             $this->parsedMessage = $message;
         };
         try {
+            /** @noinspection PhpParamsInspection */
             $response = $processor->process($testRequest, $testResponse, $secret, $function);
         } catch (InvalidSignatureException $e) {
-
+            //Ignore
         }
         $this->assertTrue(isset($response));
         $this->assertInstanceOf(Message::class, $this->parsedMessage);
@@ -101,14 +105,12 @@ class ProcessorTest extends TestCase
             ->withBody($bufferStream);
         $testResponse = new Response();
         try {
+            /** @noinspection PhpParamsInspection */
             $processor->process($testRequest, $testResponse, 'wrongSecret');
         } catch (InvalidSignatureException $e) {
-
+            $this->assertTrue(isset($e));
+            $this->assertInstanceOf(InvalidSignatureException::class, $e);
+            $this->assertEquals($testRequest, $e->getRequest());
         }
-        $this->assertTrue(isset($e));
-        $this->assertInstanceOf(InvalidSignatureException::class, $e);
-        $this->assertEquals($testRequest, $e->getRequest());
     }
-
-
 }

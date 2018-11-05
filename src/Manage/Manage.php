@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace Ufo\WebhookClient\Manage;
 
-use GuzzleHttp\Client as GuzzleClient;
+use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
+use \GuzzleHttp\ClientInterface as GuzzleClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
 use Lcobucci\JWT\Token;
@@ -34,20 +36,44 @@ final class Manage
      * @param Token $accessToken
      *
      * @throws BadResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
      */
     public function list(Token $accessToken): array
     {
-        $httpResponse =
-            $this->guzzleClient->get($this->baseUri . '/webhook',
+        return json_decode($this->guzzleClient->request(
+            RequestMethodInterface::METHOD_GET,
+            $this->baseUri . '/webhook',
+            [
+                RequestOptions::HEADERS => [
+                    'Accept'        => 'application/json',
+                    'Authorization' => 'Bearer ' . (string) $accessToken,
+                ],
+            ]
+        )->getBody()->getContents(), true);
+    }
+
+    /**
+     * @param Token $accessToken
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function listAvailable(Token $accessToken): array
+    {
+        return json_decode(
+            $this->guzzleClient->request(
+                RequestMethodInterface::METHOD_GET,
+                $this->baseUri . '/webhook/available',
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
-                ])->getBody()->getContents();
-
-        return json_decode($httpResponse, true);
+                ]
+            )->getBody()->getContents(),
+            true
+        );
     }
 
     /**
@@ -56,25 +82,27 @@ final class Manage
      * @param string $identifier
      *
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function post(Token $accessToken, string $targetUri, string $identifier): array
     {
-        $data = [
-            'target_uri' => $targetUri,
-            'identifier' => $identifier,
-        ];
         /** @var \GuzzleHttp\Psr7\Response $response */
-        $response = $this->guzzleClient->post($this->baseUri . '/webhook',
+        $response = $this->guzzleClient->request(
+            RequestMethodInterface::METHOD_POST,
+            $this->baseUri . '/webhook',
             [
                 RequestOptions::HEADERS     => [
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer ' . (string) $accessToken,
                 ],
-                RequestOptions::FORM_PARAMS => $data,
-            ]);
-        $httpResponseBody = $response->getBody()->getContents();
+                RequestOptions::FORM_PARAMS => [
+                    'target_uri' => $targetUri,
+                    'identifier' => $identifier,
+                ],
+            ]
+        );
 
-        $decodedResponse = json_decode($httpResponseBody, true);
+        $decodedResponse = json_decode($response->getBody()->getContents(), true);
         $decodedResponse['secret'] = $response->getHeader('X-Hook-Secret')[0];
 
         return $decodedResponse;
@@ -85,20 +113,24 @@ final class Manage
      * @param int   $id
      *
      * @throws BadResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
      */
     public function get(Token $accessToken, int $id): array
     {
-        $httpResponse =
-            $this->guzzleClient->get($this->baseUri . '/webhook/' . $id,
+        return json_decode(
+            $this->guzzleClient->request(
+                RequestMethodInterface::METHOD_GET,
+                $this->baseUri . '/webhook/' . $id,
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
-                ])->getBody()->getContents();
-
-        return json_decode($httpResponse, true);
+                ]
+            )->getBody()->getContents(),
+            true
+        );
     }
 
     /**
@@ -108,24 +140,26 @@ final class Manage
      * @param string $identifier
      *
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function put(Token $accessToken, int $id, string $targetUri, string $identifier): array
     {
-        $query = [
-            'target_uri' => $targetUri,
-            'identifier' => $identifier,
-        ];
-        $queryString = http_build_query($query);
-        $httpResponse =
-            $this->guzzleClient->put($this->baseUri . '/webhook/' . $id . '?' . $queryString,
+        return json_decode(
+            $this->guzzleClient->request(
+                RequestMethodInterface::METHOD_PUT,
+                $this->baseUri . '/webhook/' . $id . '?' . http_build_query([
+                    'target_uri' => $targetUri,
+                    'identifier' => $identifier,
+                ]),
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
-                ])->getBody()->getContents();
-
-        return json_decode($httpResponse, true);
+                ]
+            )->getBody()->getContents(),
+            true
+        );
     }
 
     /**
@@ -133,22 +167,21 @@ final class Manage
      * @param int   $id
      *
      * @throws BadResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return bool
      */
     public function delete(Token $accessToken, int $id): bool
     {
-        $httpResponse =
-            $this->guzzleClient->delete($this->baseUri . '/webhook/' . $id,
-                [
-                    RequestOptions::HEADERS => [
-                        'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . (string) $accessToken,
-                    ],
-                ])->getBody()->getContents();
-
-        $result = json_decode($httpResponse, true);
-
-        return $result === 'success';
+        return $this->guzzleClient->request(
+            RequestMethodInterface::METHOD_DELETE,
+            $this->baseUri . '/webhook/' . $id,
+            [
+                RequestOptions::HEADERS => [
+                    'Accept'        => 'application/json',
+                    'Authorization' => 'Bearer ' . (string) $accessToken,
+                ],
+            ]
+        )->getStatusCode() === StatusCodeInterface::STATUS_NO_CONTENT;
     }
 
     /**
@@ -156,26 +189,24 @@ final class Manage
      * @param Processor $processor
      *
      * @throws BadResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
      */
     public function claimCheck(Token $accessToken, Processor $processor): array
     {
-        $httpResponse =
-            $this->guzzleClient->get($this->baseUri . '/webhook/claim-check',
+        return array_map(
+            [$processor, 'parseMessage'],
+            json_decode($this->guzzleClient->request(
+                RequestMethodInterface::METHOD_GET,
+                $this->baseUri . '/webhook/claim-check',
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
                         'Authorization' => 'Bearer ' . (string) $accessToken,
                     ],
-                ])->getBody()->getContents();
-        /** @var array $responseMessages */
-        $responseMessages = json_decode($httpResponse, true)['data'];
-        $messages = [];
-        foreach ($responseMessages as $message) {
-            $messages[] = $processor->parseMessage($message);
-        }
-
-        return $messages;
+                ]
+            )->getBody()->getContents(), true)['data']
+        );
     }
 
     /**
