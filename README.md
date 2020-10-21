@@ -71,4 +71,3 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-scrutinizer]: https://scrutinizer-ci.com/g/uwkluis/webhook-client/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/uwkluis/webhook-client
 [link-downloads]: https://packagist.org/packages/uwkluis/webhook-client
-[link-downloads]: https://packagist.org/packages/uwkluis/webhook-client
