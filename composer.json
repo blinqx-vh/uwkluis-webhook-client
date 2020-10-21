@@ -1,5 +1,5 @@
 {
-  "name": "ufo/webhook-client",
+  "name": "uwkluis/webhook-client",
   "description": "A client package to connect to a webhook enabled API",
   "type": "library",
   "license": "MIT",
@@ -17,12 +17,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Ufo\\WebhookClient\\": "src/"
+      "UwKluis\\WebhookClient\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Ufo\\WebhookClient\\": "tests/"
+      "UwKluis\\WebhookClient\\": "tests/"
     }
   },
   "scripts": {

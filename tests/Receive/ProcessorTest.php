@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 
 
-namespace Ufo\WebhookClient\Receive;
+namespace UwKluis\WebhookClient\Receive;
 
 use GuzzleHttp\Psr7\BufferStream;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Ufo\WebhookClient\Exception\InvalidSignatureException;
+use UwKluis\WebhookClient\Exception\InvalidSignatureException;
 
 class ProcessorTest extends TestCase
 {

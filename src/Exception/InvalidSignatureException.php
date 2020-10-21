@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Ufo\WebhookClient\Exception;
+namespace UwKluis\WebhookClient\Exception;
 
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;

@@ -10,7 +10,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="ufo Test Suite">
+        <testsuite name="uwkluis Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

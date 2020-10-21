@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Ufo\WebhookClient\Receive;
+namespace UwKluis\WebhookClient\Receive;
 
 use DateTime;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Ufo\WebhookClient\Exception\InvalidSignatureException;
+use UwKluis\WebhookClient\Exception\InvalidSignatureException;
 
 final class Processor
 {

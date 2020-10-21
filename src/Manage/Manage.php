@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Ufo\WebhookClient\Manage;
+namespace UwKluis\WebhookClient\Manage;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
@@ -9,7 +9,7 @@ use \GuzzleHttp\ClientInterface as GuzzleClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
 use Lcobucci\JWT\Token;
-use Ufo\WebhookClient\Receive\Processor;
+use UwKluis\WebhookClient\Receive\Processor;
 
 final class Manage
 {

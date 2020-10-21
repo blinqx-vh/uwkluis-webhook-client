@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Ufo\WebhookClient\Receive;
+namespace UwKluis\WebhookClient\Receive;
 
 use DateTime;
 

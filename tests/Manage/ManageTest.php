@@ -1,13 +1,13 @@
 <?php
 
-namespace Ufo\WebhookClient\Manage;
+namespace UwKluis\WebhookClient\Manage;
 
 use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
-use Ufo\WebhookClient\Receive\Processor;
+use UwKluis\WebhookClient\Receive\Processor;
 
 class ManageTest extends TestCase
 {
