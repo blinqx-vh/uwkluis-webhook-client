@@ -47,7 +47,7 @@ final class Manage
             [
                 RequestOptions::HEADERS => [
                     'Accept'        => 'application/json',
-                    'Authorization' => 'Bearer ' . (string) $accessToken,
+                    'Authorization' => 'Bearer ' . $accessToken->toString(),
                 ],
             ]
         )->getBody()->getContents(), true);
@@ -68,7 +68,7 @@ final class Manage
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . (string) $accessToken,
+                        'Authorization' => 'Bearer ' . $accessToken->toString(),
                     ],
                 ]
             )->getBody()->getContents(),
@@ -93,7 +93,7 @@ final class Manage
             [
                 RequestOptions::HEADERS     => [
                     'Accept'        => 'application/json',
-                    'Authorization' => 'Bearer ' . (string) $accessToken,
+                    'Authorization' => 'Bearer ' . $accessToken->toString(),
                 ],
                 RequestOptions::FORM_PARAMS => [
                     'target_uri' => $targetUri,
@@ -125,7 +125,7 @@ final class Manage
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . (string) $accessToken,
+                        'Authorization' => 'Bearer ' . $accessToken->toString(),
                     ],
                 ]
             )->getBody()->getContents(),
@@ -154,7 +154,7 @@ final class Manage
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . (string) $accessToken,
+                        'Authorization' => 'Bearer ' . $accessToken->toString(),
                     ],
                 ]
             )->getBody()->getContents(),
@@ -178,7 +178,7 @@ final class Manage
             [
                 RequestOptions::HEADERS => [
                     'Accept'        => 'application/json',
-                    'Authorization' => 'Bearer ' . (string) $accessToken,
+                    'Authorization' => 'Bearer ' . $accessToken->toString(),
                 ],
             ]
         )->getStatusCode() === StatusCodeInterface::STATUS_NO_CONTENT;
@@ -202,7 +202,7 @@ final class Manage
                 [
                     RequestOptions::HEADERS => [
                         'Accept'        => 'application/json',
-                        'Authorization' => 'Bearer ' . (string) $accessToken,
+                        'Authorization' => 'Bearer ' . $accessToken->toString(),
                     ],
                 ]
             )->getBody()->getContents(), true)['data']
