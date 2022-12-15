@@ -24,16 +24,16 @@ final class InvalidSignatureException extends RuntimeException
         string $message = "",
         int $code = 0,
         Throwable $previous = null,
-        ServerRequestInterface $request
+        ServerRequestInterface $request = null
     ) {
         parent::__construct($message, $code, $previous);
         $this->request = $request;
     }
 
     /**
-     * @return ServerRequestInterface
+     * @return ServerRequestInterface|null
      */
-    public function getRequest(): ServerRequestInterface
+    public function getRequest()
     {
         return $this->request;
     }
