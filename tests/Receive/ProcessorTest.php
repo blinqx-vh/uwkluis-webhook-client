@@ -17,7 +17,7 @@ class ProcessorTest extends TestCase
     /** @var Message */
     private $parsedMessage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $webhookId = 1;
         $identifier = 'foo.created';

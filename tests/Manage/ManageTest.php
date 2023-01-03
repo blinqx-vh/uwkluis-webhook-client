@@ -11,15 +11,24 @@ use UwKluis\WebhookClient\Receive\Processor;
 
 class ManageTest extends TestCase
 {
+    private $token;
+
+    public function setUp(): void
+    {
+        $testDataSet = new Token\DataSet([], '');
+        $this->token = new Token\Plain($testDataSet, $testDataSet, new Token\Signature('', ''));
+    }
+
     /**
      *
      */
     public function testDelete()
     {
+
         $this->assertTrue(
             $this->mockApi(
                 'delete',
-                [new Token(), 1],
+                [$this->token, 1],
                 [],
                 StatusCodeInterface::STATUS_NO_CONTENT
             )
@@ -37,7 +46,7 @@ class ManageTest extends TestCase
             ],
             $this->mockApi(
                 'post',
-                [new Token(), 'foo.bar', 'baz'],
+                [$this->token, 'foo.bar', 'baz'],
                 [],
                 StatusCodeInterface::STATUS_OK,
                 ['X-Hook-Secret' => 'foo']
@@ -50,7 +59,7 @@ class ManageTest extends TestCase
      */
     public function testPut()
     {
-        $this->assertEquals([], $this->mockApi('put', [new Token(), 1, 'foo.bar', 'baz']));
+        $this->assertEquals([], $this->mockApi('put', [$this->token, 1, 'foo.bar', 'baz']));
     }
 
     /**
@@ -58,7 +67,7 @@ class ManageTest extends TestCase
      */
     public function testGet()
     {
-        $this->assertEquals([], $this->mockApi('get', [new Token(), 1]));
+        $this->assertEquals([], $this->mockApi('get', [$this->token, 1]));
     }
 
     /**
@@ -66,7 +75,7 @@ class ManageTest extends TestCase
      */
     public function testClaimCheck()
     {
-        $this->assertEquals([], $this->mockApi('claimCheck', [new Token(), new Processor()], [
+        $this->assertEquals([], $this->mockApi('claimCheck', [$this->token, new Processor()], [
             'data' => [],
         ]));
     }
@@ -76,7 +85,7 @@ class ManageTest extends TestCase
      */
     public function testListAvailable()
     {
-        $this->assertEquals([], $this->mockApi('listAvailable', [new Token()]));
+        $this->assertEquals([], $this->mockApi('listAvailable', [$this->token]));
     }
 
     /**
@@ -84,7 +93,7 @@ class ManageTest extends TestCase
      */
     public function testList()
     {
-        $this->assertEquals([], $this->mockApi('list', [new Token()]));
+        $this->assertEquals([], $this->mockApi('list', [$this->token]));
     }
 
     /**
