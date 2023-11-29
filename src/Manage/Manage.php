@@ -11,7 +11,7 @@ use GuzzleHttp\RequestOptions;
 use Lcobucci\JWT\Token;
 use UwKluis\WebhookClient\Receive\Processor;
 
-final class Manage
+class Manage
 {
     /** @var string */
     private $baseUri;
