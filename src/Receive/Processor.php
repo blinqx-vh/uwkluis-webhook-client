@@ -25,7 +25,7 @@ final class Processor
         ServerRequestInterface $request,
         ResponseInterface $response,
         string $secret,
-        callable $callable = null
+        callable|null $callable = null
     ): ResponseInterface {
         $body = (string) $request->getBody();
         $digestable = $body . $secret;

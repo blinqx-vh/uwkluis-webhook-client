@@ -23,8 +23,8 @@ final class InvalidSignatureException extends RuntimeException
     public function __construct(
         string $message = "",
         int $code = 0,
-        Throwable $previous = null,
-        ServerRequestInterface $request = null
+        ?Throwable $previous = null,
+        ?ServerRequestInterface $request = null
     ) {
         parent::__construct($message, $code, $previous);
         $this->request = $request;
